@@ -68,7 +68,7 @@ const openai = new OpenAI({
 */
 
 
-//*  -----  Servir archivos estaticos desde la carpeta 'public'  -----
+//*  -----  Servir Frontend  --  Archivos estaticos desde la carpeta 'public'  -----
 app.use(base, express.static(publicDirPath));
 
 //*  -----  Middleware para parsear JSON -----
@@ -288,7 +288,7 @@ const handleTranslationError = (error, res) => {
 
 const handleTranslationRequest = async (req, res) => {
 
- /**  -----  `Contexto de negocio`  -----  */
+    /**  -----  `Contexto de negocio`  -----  */
     const data = getTranslationDataFromRequest(req);
 
     //  -----  Valida los datos de traduccion y responde con error si no son validos  -----

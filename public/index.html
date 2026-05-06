@@ -25,17 +25,20 @@
 <body>
 
 
+    <!--  -----  Layout del Chat  -----  -->
     <div class="layout__chat">
 
         <!--  ----  Header  -----   -->
         <header class="chat__header">
 
+            <!--  -----  Ícono del Header  -----  -->
             <img 
                 class="header__icon" 
                 src="./assets/img/translator-icon.png" 
                 alt="Ícono de Traductor"
             >
 
+            <!--  -----  Título del Header  -----  -->
             <h1 class="header__title"> 
                 Chat de Traducciones 
             </h1>
@@ -48,14 +51,19 @@
 
             <!--  -----  Mensajes del Chat  -----  -->
             <div class="chat__messages">
-                <!--  *****  Cargar los Mensajes  *****  -->
+                <!--  *****  Cargar los Mensajes del usuario  *****  -->
+                <!--  *****  Cargar los Mensajes que genera la IA  *****  -->
             </div>
 
             <!--  -----  Inputs del Chat  -----  -->
             <div class="chat__input-group">
 
                 <!--  -----  Input de Texto con textarea -----  -->
-                <textarea id="inputText" class="chat__input" placeholder="Que quieres traducir ahora?"></textarea>
+                <textarea 
+                    id="inputText" 
+                    class="chat__input-text" 
+                    placeholder="Que quieres traducir ahora?"
+                ></textarea>
 
 
                 <!--  -----  Contenedor de Inputs  -----  -->
