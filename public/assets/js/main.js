@@ -9,7 +9,7 @@
 
 
     /** @type {string} -----  `Ruta base del proyecto`  ----- */
-    const base = '/01-victor-robles-web/08-desarrollo-web-ia-openai-deepseek-javascript-nodejs/01-traducciones-openai';
+    const base = '/victor-robles-web/08-desarrollo-web-ia-openai-deepseek-javascript-nodejs/01-traducciones-openai';
 
 
     //  -----  Referencias al DOM  -----

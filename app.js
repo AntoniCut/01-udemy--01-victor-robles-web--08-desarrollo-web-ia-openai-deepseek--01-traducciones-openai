@@ -51,7 +51,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 /** -----  `Ruta base del proyecto`  ----- */
-const base = '/01-victor-robles-web/08-desarrollo-web-ia-openai-deepseek-javascript-nodejs/01-traducciones-openai';
+const base = '/victor-robles-web/08-desarrollo-web-ia-openai-deepseek-javascript-nodejs/01-traducciones-openai';
 
 
 /**  -----  `Inicializacion del cliente de OpenAI`  ----- */
