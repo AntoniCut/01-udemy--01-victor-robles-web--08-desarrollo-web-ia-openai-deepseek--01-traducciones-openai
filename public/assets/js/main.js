@@ -61,7 +61,7 @@
         $userMessage.classList.add('chat__message', 'chat__message--user');
 
         //  -----  Establecer el contenido del mensaje de usuario  -----
-        $userMessage.textContent = text;
+        $userMessage.textContent = `Tú: ${text}`;
 
         //  -----  Agregar el mensaje de usuario al contenedor de mensajes del chat  -----
         $chatMessages?.appendChild($userMessage);
@@ -188,10 +188,14 @@
      * -----  `appendBotMessage(translation)`  -----
      * ---------------------------------------------
      * - Crea y agrega el mensaje de la IA al contenedor del chat.
+     * - Si se indica `isTyping`, marca el mensaje como "Escribiendo..." con su clase específica.
+     * - Devuelve la referencia al elemento creado para poder actualizarlo después (p. ej. reemplazar "Escribiendo..." por la respuesta final).
      * @param {string} translation - `texto traducido por la IA`
+     * @param {boolean} [isTyping=false] - `true` para aplicar el estilo del estado "Escribiendo..."`
+     * @returns {HTMLDivElement | undefined} - `elemento del mensaje del bot añadido al chat`
      */
 
-    const appendBotMessage = (translation) => {
+    const appendBotMessage = (translation, isTyping = false) => {
 
         /** @type {HTMLDivElement} - `crear mensaje de la IA` */
         const $botMessage = document.createElement('div');
@@ -199,14 +203,22 @@
         //  -----  Agregar clases CSS para el mensaje de la IA  -----
         $botMessage.classList.add('chat__message', 'chat__message--bot');
 
+        //  -----  Si es el estado "Escribiendo...", añadimos su clase específica  -----
+        if (isTyping)
+            $botMessage.classList.add('chat__message--typing');
+
         //  -----  Establecer el contenido del mensaje de la IA con la traducción recibida  -----
-        $botMessage.textContent = translation;
+        $botMessage.textContent = isTyping
+            ? `Traductor: ${translation}`
+            : `Traductor: ${translation}`;
 
         //  -----  Agregar el mensaje de la IA al contenedor de mensajes del chat  -----
         $chatMessages?.appendChild($botMessage);
 
         //  -----  Desplazar el contenedor de mensajes del chat hacia abajo para mostrar el nuevo mensaje  -----
         scrollChat();
+
+        return $botMessage;
 
     };
 
@@ -218,6 +230,7 @@
      * ------------------------------------- 
      * @async
      * - Genera la traducción del texto ingresado por el usuario utilizando la API de traducción.
+     * - Muestra un mensaje "Escribiendo..." con animación de puntos mientras se espera la respuesta.
      * @returns {Promise<void>} - No devuelve ningún valor, pero actualiza el DOM con los mensajes del usuario y la traducción generada.
      * @throws {Error} - Lanza un error si ocurre algún problema durante la traducción, como una respuesta no válida de la API o problemas de red.
      */
@@ -239,11 +252,47 @@
         //  -----  Intentar traducir el texto usando la API de traducción  -----
         try {
 
+
+            /** @type {HTMLDivElement | undefined} - `elemento temporal con el texto "Escribiendo..." que se reemplazará al recibir la respuesta` */
+            const $typingMessage = appendBotMessage('Escribiendo.', true);
+
+            /** @type {number} - `contador de puntos para la animación de "Escribiendo..."` */
+            let dots = 1;
+
+            /** @type {ReturnType<typeof setInterval> | undefined} - `intervalo que actualiza los puntos del mensaje "Escribiendo..."` */
+            const typingInterval = setInterval(() => {
+
+                //  -----  Ciclar entre 1, 2 y 3 puntos  -----
+                dots = (dots % 3) + 1;
+
+                //  -----  Actualizar el texto del mensaje "Escribiendo..." con los puntos correspondientes  -----
+                if ($typingMessage)
+                    $typingMessage.textContent = `Traductor: Escribiendo${'.'.repeat(dots)}`;
+
+            }, 500);
+
+
             /**  -----  Traducir el texto usando la API de traducción  -----  */
             const translation = await fetchTranslation(text, targetLang);
-            
-            //  -----  Agregar mensaje de la IA con la traducción generada al chat  -----
-            appendBotMessage(translation);
+
+
+            //  -----  Detenemos la animación de "Escribiendo..."  -----
+            clearInterval(typingInterval);
+
+
+            //  -----  Reemplazamos el contenido del mensaje "Escribiendo..." por la respuesta real del bot  -----
+            //  -----  y quitamos la clase de "Escribiendo..."                       -----
+            if ($typingMessage) {
+
+                $typingMessage.textContent = `Traductor: ${translation}`;
+                $typingMessage.classList.remove('chat__message--typing');
+
+            } else
+                appendBotMessage(translation);
+
+
+            //  -----  Desplazar el contenedor de mensajes del chat hacia abajo para mostrar la nueva respuesta  -----
+            scrollChat();
 
         }
 
@@ -277,7 +326,7 @@
     $inputText?.addEventListener('keydown', (event) => {
 
         //  -----  Si se presiona Enter, generar la traducción  -----
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && !event.shiftKey) {
 
             event.preventDefault();
             
