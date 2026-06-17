@@ -110,7 +110,7 @@ body {
     align-items: center;
     gap: 1rem;
     padding: 2rem;
-    margin-bottom: 5rem;
+    margin-bottom: 3rem;
     border-radius: var(--border-radius-lg);
     font-size: 1rem;
     background-color: var(--color-bg-panel);
@@ -236,7 +236,7 @@ body {
 
 .chat__messages {
     width: 100%;
-    height: 30rem;
+    height: 25rem;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
